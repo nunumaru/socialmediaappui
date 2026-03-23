@@ -16,14 +16,13 @@ class _RootScreenState extends State<RootScreen> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const Center(child: Text('Search', style: TextStyle(color: Colors.white))),
-    const SizedBox(),
+    const SizedBox(), // placeholder para sa create
     ActivityScreen(),
     const ProfileScreen(),
   ];
 
   void _onTabTapped(int index) {
-    if (index == 2) {
+    if (index == 1) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const CreateThreadScreen()),
@@ -57,10 +56,9 @@ class _RootScreenState extends State<RootScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildNavIcon(Icons.home_outlined, Icons.home, 0),
-            _buildNavIcon(Icons.search, Icons.search, 1),
             _buildCreateButton(),
-            _buildNavIconWithBadge(Icons.favorite_border, Icons.favorite, 3),
-            _buildNavIcon(Icons.person_outline, Icons.person, 4),
+            _buildNavIconWithBadge(Icons.favorite_border, Icons.favorite, 2),
+            _buildNavIcon(Icons.person_outline, Icons.person, 3),
           ],
         ),
       ),
@@ -89,7 +87,7 @@ class _RootScreenState extends State<RootScreen> {
 
   Widget _buildCreateButton() {
     return GestureDetector(
-      onTap: () => _onTabTapped(2),
+      onTap: () => _onTabTapped(1),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -101,8 +99,8 @@ class _RootScreenState extends State<RootScreen> {
     );
   }
 
-  Widget _buildNavIconWithBadge(IconData outlinedIcon, IconData filledIcon,
-      int index) {
+  Widget _buildNavIconWithBadge(
+      IconData outlinedIcon, IconData filledIcon, int index) {
     final isActive = _currentIndex == index;
     return GestureDetector(
       onTap: () => _onTabTapped(index),
