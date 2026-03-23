@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
-import 'root_screen.dart'; // ✅ palitan thread_feed_screen ng root_screen
+import 'root_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-          user != null ? const RootScreen() : const LoginScreen(), // ✅ RootScreen na
+          user != null ? const RootScreen() : const LoginScreen(),
         ),
       );
     });
