@@ -1,56 +1,140 @@
 import 'package:flutter/material.dart';
-import '../widgets/post_card.dart';
+import 'home_screen.dart';
+import 'create_thread_screen.dart';
+import 'activity_screen.dart';
+import 'profile_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class RootScreen extends StatefulWidget {
+  const RootScreen({super.key});
+
+  @override
+  State<RootScreen> createState() => _RootScreenState();
+}
+
+class _RootScreenState extends State<RootScreen> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const Center(child: Text('Search', style: TextStyle(color: Colors.white))),
+    const SizedBox(),
+    ActivityScreen(),
+    const ProfileScreen(),
+  ];
+
+  void _onTabTapped(int index) {
+    if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const CreateThreadScreen()),
+      );
+      return;
+    }
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("username"),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: const [
-
-          CircleAvatar(radius: 40),
-
-          SizedBox(height: 12),
-
-          Text(
-            "username",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+      backgroundColor: Colors.black,
+      body: _screens[_currentIndex],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.white.withOpacity(0.08),
+              blurRadius: 20,
+              spreadRadius: 1,
+              offset: const Offset(0, -4),
             ),
-          ),
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavIcon(Icons.home_outlined, Icons.home, 0),
+            _buildNavIcon(Icons.search, Icons.search, 1),
+            _buildCreateButton(),
+            _buildNavIconWithBadge(Icons.favorite_border, Icons.favorite, 3),
+            _buildNavIcon(Icons.person_outline, Icons.person, 4),
+          ],
+        ),
+      ),
+    );
+  }
 
-          SizedBox(height: 4),
+  Widget _buildNavIcon(IconData outlinedIcon, IconData filledIcon, int index) {
+    final isActive = _currentIndex == index;
+    return GestureDetector(
+      onTap: () => _onTabTapped(index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: isActive ? Colors.grey.shade800 : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(
+          isActive ? filledIcon : outlinedIcon,
+          color: isActive ? Colors.white : Colors.grey,
+          size: 28,
+        ),
+      ),
+    );
+  }
 
-          Text("Bio goes here..."),
+  Widget _buildCreateButton() {
+    return GestureDetector(
+      onTap: () => _onTabTapped(2),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade800,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: const Icon(Icons.add, color: Colors.white, size: 26),
+      ),
+    );
+  }
 
-          SizedBox(height: 20),
-
-          Divider(),
-
-          PostCard(
-            username: "taylor swift",
-            avatarUrl:
-            "https://images.hdqwalls.com/wallpapers/2018-taylor-swift-9v.jpg",
-            content: "Check out my new album single!",
-            imageUrl:
-            "https://tse1.mm.bing.net/th/id/OIP.K9wX7cPg-Em9-0-VWhu0rwHaEK?w=1600&h=900&rs=1&pid=ImgDetMain&o=7&rm=3",
-          ),
-
-          PostCard(
-            username: "bruno marsu",
-            avatarUrl: "https://i.pravatar.cc/150?img=2",
-            content: "Flutter makes UI development so fast!",
-            imageUrl: null,
-          ),
-        ],
+  Widget _buildNavIconWithBadge(IconData outlinedIcon, IconData filledIcon,
+      int index) {
+    final isActive = _currentIndex == index;
+    return GestureDetector(
+      onTap: () => _onTabTapped(index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: isActive ? Colors.grey.shade800 : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Icon(
+              isActive ? filledIcon : outlinedIcon,
+              color: isActive ? Colors.white : Colors.grey,
+              size: 28,
+            ),
+            Positioned(
+              top: -2,
+              right: -4,
+              child: Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
