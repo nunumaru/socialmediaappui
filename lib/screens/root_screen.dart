@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'create_thread_screen.dart';
 import 'activity_screen.dart';
+import 'search_screen.dart'; // ✅ Added
 import 'profile_screen.dart';
 
 class RootScreen extends StatefulWidget {
@@ -16,13 +17,14 @@ class _RootScreenState extends State<RootScreen> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const SizedBox(), // placeholder para sa create
+    const SearchScreen(), // ✅ Replaced SizedBox with SearchScreen
+    const SizedBox(),     // placeholder para sa create
     ActivityScreen(),
     const ProfileScreen(),
   ];
 
   void _onTabTapped(int index) {
-    if (index == 1) {
+    if (index == 2) { // ✅ Create is index 2 now
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const CreateThreadScreen()),
@@ -56,9 +58,10 @@ class _RootScreenState extends State<RootScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildNavIcon(Icons.home_outlined, Icons.home, 0),
-            _buildCreateButton(),
-            _buildNavIconWithBadge(Icons.favorite_border, Icons.favorite, 2),
-            _buildNavIcon(Icons.person_outline, Icons.person, 3),
+            _buildNavIcon(Icons.search_outlined, Icons.search, 1), // ✅ Search icon
+            _buildCreateButton(),                                    // index 2
+            _buildNavIconWithBadge(Icons.favorite_border, Icons.favorite, 3), // ✅ index 3
+            _buildNavIcon(Icons.person_outline, Icons.person, 4),             // ✅ index 4
           ],
         ),
       ),
@@ -87,7 +90,7 @@ class _RootScreenState extends State<RootScreen> {
 
   Widget _buildCreateButton() {
     return GestureDetector(
-      onTap: () => _onTabTapped(1),
+      onTap: () => _onTabTapped(2), // ✅ Updated to index 2
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
